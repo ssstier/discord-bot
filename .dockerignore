@@ -1,0 +1,8 @@
+#.dockerignore
+.env
+.gitignore
+.git/
+__pycache__/
+Dockerfile
+LICENSE
+*.md
