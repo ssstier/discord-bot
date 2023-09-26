@@ -6,7 +6,6 @@ import random
 import database  # Your own database module
 from getimage import download_image  # Your own getimage module
 from getstock import get_stock_info  # Your own getstock module
-from command_prompt import icmp  # Your own command_prompt module
 from texting import send_text  # Your own texting module
 from chatgpt import ask, generate_image  # Your own chatgpt module
 
@@ -32,12 +31,11 @@ client.remove_command('help')
 @client.command()
 async def help(ctx: Context):
     embed = discord.Embed(title="Help", description="List of commands are:", color=discord.Color.green())
-    embed.add_field(name="!gpt [args]", value="Generates text based on GPT", inline=False)
-    embed.add_field(name="!dalle [prompt]", value="Generates an image based on the DALL-E model", inline=False)
+    embed.add_field(name="!gpt [args]", value="Generates text based on GPT-4", inline=False)
+    embed.add_field(name="!dalle [prompt]", value="Generates an image based on the DALL-E 2 model", inline=False)
     embed.add_field(name="!bing [query]", value="Fetches an image based on the query from Bing", inline=False)
     embed.add_field(name="!stock [stock]", value="Fetches stock information", inline=False)
     embed.add_field(name="!randomcountry", value="Fetches a random country", inline=False)
-    embed.add_field(name="!ping [host]", value="Pings the given host", inline=False)
     embed.add_field(name="!text [number] [message]", value="Sends a text message to the specified number", inline=False)
 
     await ctx.send(embed=embed)
@@ -64,11 +62,6 @@ async def stock(ctx, stock):
 @client.command()
 async def randomcountry(ctx):
     await ctx.send(random.choice(database.countries))
-
-@client.command()
-async def ping(ctx, host):
-    output = icmp(host)
-    await ctx.send(output)
 
 @client.command()
 async def text(ctx, destination_number, *, message):
