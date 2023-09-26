@@ -6,6 +6,9 @@ import random
 import asyncio
 import json
 import re
+from PIL import Image, ImageEnhance, ImageFilter
+import pytesseract
+import io
 import database
 from getimage import download_image
 from getstock import get_stock_info
@@ -43,7 +46,7 @@ async def help(ctx: Context):
     )
 
     embed.add_field(
-        name="!gpt [args]",
+        name="!gpt [prompt]",
         value="Generates text based on GPT-4.",
         inline=False,
     )
@@ -69,11 +72,15 @@ async def help(ctx: Context):
         inline=False,
     )
     embed.add_field(
+        name="!OCR [image]",
+        value="Uses optical character recognition to read text from an image",
+        inline=False,
+    )
+    embed.add_field(
         name="!quiz [subject]",
         value="Generates a quiz question.",
         inline=False,
     )
-
     quiz_set_desc = (
         "Set quiz settings. Valid settings and their ranges are:\n"
         "- `time [5-60]`: The time limit for answering a quiz question.\n"
@@ -125,6 +132,31 @@ async def text(ctx, destination_number, *, message):
         os.getenv("AUTH_TOKEN"),
     )
     await ctx.send("Message has been sent")
+
+
+@client.command()
+async def OCR(ctx):
+    if len(ctx.message.attachments) == 0:
+        await ctx.send("Please attach an image.")
+        return
+
+    attachment = ctx.message.attachments[0]
+    image_data = await attachment.read()
+
+    image = Image.open(io.BytesIO(image_data))
+
+    # Preprocessing
+    image = image.convert('L')  # Convert to grayscale
+    image = image.filter(ImageFilter.SHARPEN)  # Apply sharpen filter
+    enhancer = ImageEnhance.Contrast(image)
+    image = enhancer.enhance(2)  # Increase contrast
+
+    text = pytesseract.image_to_string(image)
+
+    if len(text) == 0:
+        await ctx.send("No text found.")
+    else:
+        await ctx.send(f"Extracted text: {text}")
 
 
 @client.command()
