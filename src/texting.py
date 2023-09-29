@@ -3,9 +3,8 @@
 # DANGER! This is insecure. See http://twil.io/secure
 from twilio.rest import Client
 
-def send_text(destination_number, message, source_number, account_sid, auth_token):
-    client = Client(account_sid, auth_token)
+
+def send_text(destination_number, message, source_number, account_sid, token):
+    client = Client(account_sid, token)
     message = client.messages.create(body=message, from_=source_number,
-                                     to= f'+1{destination_number}')
-
-
+                                     to=f'+1{destination_number}')

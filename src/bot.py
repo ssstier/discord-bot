@@ -4,11 +4,9 @@ from discord.ext.commands import Bot, CommandNotFound, Context
 from dotenv import load_dotenv
 import random
 import asyncio
-from PIL import Image, ImageEnhance, ImageFilter
-import pytesseract
-import io
 import database
 from quiz import generate_quiz, update_settings
+from ocr import extract_text
 from getimage import download_image
 from getstock import get_stock_info
 from texting import send_text
@@ -143,21 +141,7 @@ async def OCR(ctx):
 
     attachment = ctx.message.attachments[0]
     image_data = await attachment.read()
-
-    image = Image.open(io.BytesIO(image_data))
-
-    # Preprocessing
-    image = image.convert('L')  # Convert to grayscale
-    image = image.filter(ImageFilter.SHARPEN)  # Apply sharpen filter
-    enhancer = ImageEnhance.Contrast(image)
-    image = enhancer.enhance(2)  # Increase contrast
-
-    text = pytesseract.image_to_string(image)
-
-    if len(text) == 0:
-        await ctx.send("No text found.")
-    else:
-        await ctx.send(f"Extracted text: {text}")
+    await ctx.send(extract_text(image_data))
 
 
 # we need to grab the settings here

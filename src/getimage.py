@@ -2,6 +2,7 @@ from bing_image_urls import bing_image_urls
 import requests
 from io import BytesIO
 
+
 def download_image(query):
     urls = bing_image_urls(query, limit=3)
     for url in urls:
