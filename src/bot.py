@@ -183,7 +183,10 @@ async def quiz(ctx, *args):
     else:
         user_answer_label = msg.content.upper()
         is_correct = user_answer_label == quiz["answer"]
-        response = f"{'Correct' if is_correct else 'Wrong'}! The answer was {quiz['answer']}."
+        response = (
+            f"{'Correct' if is_correct else 'Wrong'}! "
+            f"The answer was {quiz['answer']}."
+        )
 
     await ctx.send(response)
 
