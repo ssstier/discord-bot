@@ -22,7 +22,7 @@ Ensure to fill out the .env file in the root directory with the required API key
 
 ### 4. Start the Bot
 ```
-python src/bot.py
+python3 src/bot.py
 ```
 
 ----
